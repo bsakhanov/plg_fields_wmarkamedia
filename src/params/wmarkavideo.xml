@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+	<fields name="fieldparams">
+		<fieldset name="fieldparams">
+			<field name="mode" type="list" label="PLG_FIELDS_WMARKAMEDIA_PARAM_MODE" default="" validate="options">
+				<option value="">COM_FIELDS_FIELD_USE_GLOBAL</option>
+				<option value="facade">PLG_FIELDS_WMARKAMEDIA_MODE_FACADE</option>
+				<option value="iframe">PLG_FIELDS_WMARKAMEDIA_MODE_IFRAME</option>
+			</field>
+			<field name="poster" type="list" label="PLG_FIELDS_WMARKAMEDIA_PARAM_POSTER" default="" validate="options">
+				<option value="">COM_FIELDS_FIELD_USE_GLOBAL</option>
+				<option value="auto">PLG_FIELDS_WMARKAMEDIA_POSTER_AUTO</option>
+				<option value="none">PLG_FIELDS_WMARKAMEDIA_POSTER_NONE</option>
+			</field>
+			<field name="ratio" type="list" label="PLG_FIELDS_WMARKAMEDIA_PARAM_RATIO" default="" validate="options">
+				<option value="">COM_FIELDS_FIELD_USE_GLOBAL</option>
+				<option value="auto">PLG_FIELDS_WMARKAMEDIA_RATIO_AUTO</option>
+				<option value="16:9">16:9</option>
+				<option value="9:16">9:16</option>
+				<option value="4:5">4:5</option>
+				<option value="1:1">1:1</option>
+				<option value="4:3">4:3</option>
+			</field>
+			<field name="vertical_max_width" type="number" label="PLG_FIELDS_WMARKAMEDIA_PARAM_VMAX" default="" min="200" max="720" step="10" filter="integer" />
+			<field name="nocookie" type="list" label="PLG_FIELDS_WMARKAMEDIA_PARAM_NOCOOKIE" default="" validate="options">
+				<option value="">COM_FIELDS_FIELD_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="show_link" type="list" label="PLG_FIELDS_WMARKAMEDIA_PARAM_SHOWLINK" default="" validate="options">
+				<option value="">COM_FIELDS_FIELD_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="jsonld" type="list" label="PLG_FIELDS_WMARKAMEDIA_PARAM_JSONLD" default="" validate="options">
+				<option value="">COM_FIELDS_FIELD_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="css_class" type="text" label="PLG_FIELDS_WMARKAMEDIA_PARAM_CSSCLASS" default="" />
+		</fieldset>
+	</fields>
+</form>

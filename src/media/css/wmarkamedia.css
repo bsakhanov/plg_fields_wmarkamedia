@@ -1,0 +1,57 @@
+/* Wmarka Media — стили поля. Все классы с префиксом wm-; цвета и размеры задаются переменными. */
+
+/* ---------- видео ---------- */
+.wm-video{--wm-ratio:16/9;--wm-max:100%;--wm-accent:#ec3434;--wm-radius:12px;position:relative;max-width:var(--wm-max);margin:0 0 1rem}
+.wm-video__btn{all:unset;box-sizing:border-box;display:block;position:relative;width:100%;aspect-ratio:var(--wm-ratio);background:#14181d;border-radius:var(--wm-radius);overflow:hidden;cursor:pointer;color:#fff}
+.wm-video__btn:focus-visible{outline:3px solid #3483ec;outline-offset:2px}
+.wm-video__poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.wm-video__badge{position:absolute;left:10px;top:10px;padding:2px 9px;border-radius:999px;background:rgba(0,0,0,.66);font:600 .75rem/1.5 system-ui,sans-serif}
+.wm-video__play{position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;background:rgba(0,0,0,.62);transition:background .15s}
+.wm-video__play::before{content:"";position:absolute;left:25px;top:20px;border-style:solid;border-width:12px 0 12px 20px;border-color:transparent transparent transparent #fff}
+.wm-video__btn:hover .wm-video__play,.wm-video__btn:focus-visible .wm-video__play{background:var(--wm-accent)}
+.wm-video iframe,.wm-video video{display:block;width:100%;aspect-ratio:var(--wm-ratio);border:0;border-radius:var(--wm-radius);background:#000}
+.wm-video__link{display:inline-block;margin-top:.4rem;font-size:.875rem}
+.wm-video--vertical{margin-inline:auto}
+.wm-video-link{margin:0 0 1rem}
+
+/* ---------- галерея ---------- */
+.wm-gallery{--wm-cols:3;display:grid;grid-template-columns:repeat(var(--wm-cols),minmax(0,1fr));gap:12px;margin:0 0 1rem}
+.wm-gallery__item{margin:0;min-width:0}
+.wm-gallery__item img{display:block;width:100%;height:auto;border-radius:8px}
+.wm-gallery__btn{all:unset;display:block;cursor:zoom-in;border-radius:8px}
+.wm-gallery__btn{position:relative}
+.wm-gallery__btn[hidden]{display:none}
+.wm-gallery__more{position:absolute;inset:0;display:grid;place-items:center;border-radius:8px;background:rgba(0,0,0,.55);color:#fff;font:600 1.75rem/1 system-ui,sans-serif}
+.wm-gallery__btn:focus-visible{outline:3px solid #3483ec;outline-offset:2px}
+.wm-gallery figcaption{margin-top:.35rem;font-size:.8125rem;line-height:1.4}
+.wm-gallery__credit{opacity:.7}
+@media (max-width:640px){.wm-gallery{grid-template-columns:repeat(min(var(--wm-cols),2),minmax(0,1fr))}}
+
+/* окно просмотра */
+.wm-lightbox{border:0;padding:0;width:100vw;height:100vh;max-width:100vw;max-height:100vh;background:rgba(10,12,14,.96);color:#fff}
+.wm-lightbox::backdrop{background:rgba(10,12,14,.96)}
+.wm-lightbox[open]{display:grid;grid-template-rows:auto minmax(0,1fr)}
+.wm-lightbox__bar{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;font-size:.875rem}
+.wm-lightbox__stage{position:relative;display:grid;place-items:center;min-height:0;padding:0 56px 16px}
+.wm-lightbox__fig{margin:0;max-height:100%;display:grid;grid-template-rows:minmax(0,1fr) auto;justify-items:center;gap:8px;min-height:0}
+.wm-lightbox__fig img{max-width:100%;max-height:calc(100vh - 130px);object-fit:contain;border-radius:6px}
+.wm-lightbox__fig figcaption{font-size:.9rem;text-align:center;max-width:70ch}
+.wm-lightbox button{all:unset;cursor:pointer;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;font-size:1.6rem;line-height:1;color:#fff}
+.wm-lightbox button:hover,.wm-lightbox button:focus-visible{background:rgba(255,255,255,.16)}
+/* селекторы с двумя классами: иначе «all:unset» у кнопок окна перебивает позиционирование стрелок */
+.wm-lightbox .wm-lightbox__nav{position:absolute;top:50%;margin-top:-22px;font-size:2rem}
+.wm-lightbox .wm-lightbox__nav--prev{left:6px}
+.wm-lightbox .wm-lightbox__nav--next{right:6px}
+@media (max-width:640px){.wm-lightbox__stage{padding:0 6px 12px}.wm-lightbox .wm-lightbox__nav{background:rgba(0,0,0,.45)}}
+
+/* ---------- ссылки ---------- */
+.wm-links{margin:0 0 1rem}
+.wm-links__title{margin:0 0 .4rem;font-weight:600}
+.wm-links__list{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.wm-links--buttons .wm-links__list{flex-direction:row;flex-wrap:wrap}
+.wm-links__a{--wm-accent:#5b6670;display:inline-flex;align-items:center;gap:10px;padding:8px 14px;border:1px solid rgba(128,128,128,.35);border-radius:8px;text-decoration:none;color:inherit}
+.wm-links__a:hover,.wm-links__a:focus-visible{border-color:var(--wm-accent)}
+.wm-links__src{margin-left:auto;padding-left:12px;font-size:.8125rem;opacity:.65}
+.wm-links__dot{flex:none;width:12px;height:12px;border-radius:50%;background:var(--wm-accent)}
+
+@media (prefers-reduced-motion:reduce){.wm-video__play{transition:none}}

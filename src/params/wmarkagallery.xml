@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+	<fields name="fieldparams">
+		<fieldset name="fieldparams">
+			<field name="columns" type="list" label="PLG_FIELDS_WMARKAMEDIA_PARAM_COLUMNS" default="" validate="options">
+				<option value="">COM_FIELDS_FIELD_USE_GLOBAL</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+			</field>
+			<field name="lightbox" type="list" label="PLG_FIELDS_WMARKAMEDIA_PARAM_LIGHTBOX" default="" validate="options">
+				<option value="">COM_FIELDS_FIELD_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="show_caption" type="list" label="PLG_FIELDS_WMARKAMEDIA_PARAM_SHOWCAPTION" default="" validate="options">
+				<option value="">COM_FIELDS_FIELD_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="show_credit" type="list" label="PLG_FIELDS_WMARKAMEDIA_PARAM_SHOWCREDIT" default="" validate="options">
+				<option value="">COM_FIELDS_FIELD_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="jsonld" type="list" label="PLG_FIELDS_WMARKAMEDIA_PARAM_JSONLD" default="" validate="options">
+				<option value="">COM_FIELDS_FIELD_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="thumbs" type="list" label="PLG_FIELDS_WMARKAMEDIA_PARAM_THUMBS" default="" validate="options">
+				<option value="">COM_FIELDS_FIELD_USE_GLOBAL</option>
+				<option value="auto">PLG_FIELDS_WMARKAMEDIA_THUMBS_AUTO</option>
+				<option value="none">PLG_FIELDS_WMARKAMEDIA_THUMBS_NONE</option>
+			</field>
+			<field name="thumb_width" type="number" label="PLG_FIELDS_WMARKAMEDIA_PARAM_THUMBWIDTH" default="" min="200" max="2000" step="50" filter="integer" />
+			<field name="full_width" type="number" label="PLG_FIELDS_WMARKAMEDIA_PARAM_FULLWIDTH" default="" min="800" max="4000" step="100" filter="integer" />
+			<field name="preview_count" type="number" label="PLG_FIELDS_WMARKAMEDIA_PARAM_PREVIEW" default="" min="0" max="500" step="1" filter="integer" />
+			<field name="max_items" type="number" label="PLG_FIELDS_WMARKAMEDIA_PARAM_MAXITEMS" default="" min="0" max="500" step="1" filter="integer" />
+			<field name="css_class" type="text" label="PLG_FIELDS_WMARKAMEDIA_PARAM_CSSCLASS" default="" />
+		</fieldset>
+	</fields>
+</form>
