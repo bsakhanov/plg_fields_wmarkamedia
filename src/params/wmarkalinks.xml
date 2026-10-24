@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form>
+	<fields name="fieldparams">
+		<fieldset name="fieldparams">
+			<field name="block_title" type="text" label="PLG_FIELDS_WMARKAMEDIA_PARAM_BLOCKTITLE" default="" />
+			<field name="style" type="list" label="PLG_FIELDS_WMARKAMEDIA_PARAM_STYLE" default="" validate="options">
+				<option value="">COM_FIELDS_FIELD_USE_GLOBAL</option>
+				<option value="list">PLG_FIELDS_WMARKAMEDIA_STYLE_LIST</option>
+				<option value="buttons">PLG_FIELDS_WMARKAMEDIA_STYLE_BUTTONS</option>
+			</field>
+			<field name="new_tab" type="list" label="PLG_FIELDS_WMARKAMEDIA_PARAM_NEWTAB" default="" validate="options">
+				<option value="">COM_FIELDS_FIELD_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="css_class" type="text" label="PLG_FIELDS_WMARKAMEDIA_PARAM_CSSCLASS" default="" />
+		</fieldset>
+	</fields>
+</form>
