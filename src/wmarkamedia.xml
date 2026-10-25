@@ -6,7 +6,7 @@
 	<copyright>(C) 2026 Beibit Sakhanov</copyright>
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<authorUrl>https://webmarka.kz</authorUrl>
-	<version>1.1.1</version>
+	<version>1.1.2</version>
 	<description>PLG_FIELDS_WMARKAMEDIA_XML_DESCRIPTION</description>
 	<namespace path="src">Wmarka\Plugin\Fields\WmarkaMedia</namespace>
 	<scriptfile>script.php</scriptfile>
