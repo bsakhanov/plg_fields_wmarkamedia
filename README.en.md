@@ -2,7 +2,7 @@
 
 [Русский](README.md) · **English** · [Қазақша](README.kk.md)
 
-Plugin `plg_fields_wmarkamedia` 1.1.1 · Joomla 5.2 and later, including 6.x · GNU GPL version 2 or later
+Plugin `plg_fields_wmarkamedia` 1.1.2 · Joomla 5.2 and later, including 6.x · GNU GPL version 2 or later
 
 ## 1. What it is
 

@@ -2,6 +2,11 @@
 
 Формат — [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/), версии — [SemVer](https://semver.org/lang/ru/).
 
+## [1.1.2] — 2026-10-25
+
+### Исправлено / Fixed
+- Постер YouTube обрезался снизу в шаблонах с правилом вида `img { height: auto }`: у постера 4:3 высота перебивала рамку 16:9. Селектор постера усилен (`.wm-video .wm-video__btn .wm-video__poster`), добавлено `max-width:none`. / The YouTube poster was cropped at the bottom in templates with an `img { height: auto }` rule; the poster selector is now more specific.
+
 ## [1.1.1] — 2026-10-24
 
 ### Добавлено / Added
