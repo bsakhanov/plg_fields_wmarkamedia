@@ -2,6 +2,12 @@
 
 Формат — [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/), версии — [SemVer](https://semver.org/lang/ru/).
 
+## [1.1.3] — 2026-10-28
+
+### Исправлено / Fixed
+- Путь к фото с нулевым байтом (`%00`) вызывал `ValueError` в `realpath()` и обрывал вывод страницы; теперь такой путь отклоняется. / A photo path containing a null byte no longer aborts page rendering.
+- Перед уменьшением снимка проверяется доступная память: при нехватке берётся оригинал вместо фатальной ошибки. / Available memory is checked before resizing an image; the original is used instead of a fatal error.
+
 ## [1.1.2] — 2026-10-25
 
 ### Исправлено / Fixed

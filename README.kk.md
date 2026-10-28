@@ -2,7 +2,7 @@
 
 [Русский](README.md) · [English](README.en.md) · **Қазақша**
 
-`plg_fields_wmarkamedia` плагині 1.1.2 · Joomla 5.2 және одан жаңа нұсқалары, 6.x қоса · GNU GPL 2-нұсқасы немесе одан жаңасы
+`plg_fields_wmarkamedia` плагині 1.1.3 · Joomla 5.2 және одан жаңа нұсқалары, 6.x қоса · GNU GPL 2-нұсқасы немесе одан жаңасы
 
 ## 1. Бұл не
 
