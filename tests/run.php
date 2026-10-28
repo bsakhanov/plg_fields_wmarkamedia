@@ -119,7 +119,7 @@ namespace {
         check($r !== null && $r['url'] === null && $r['w'] === 200 && $r['h'] === 100, 'картинки: лёгкий оригинал не пережимается');
     }
 
-    foreach (['../secret.txt', 'images/../secret.txt', 'images/../../secret.txt', '/etc/passwd', 'images/нет-такого.jpg', 'images/note.txt', 'secret.txt'] as $bad) {
+    foreach (['../secret.txt', 'images/../secret.txt', 'images/../../secret.txt', '/etc/passwd', 'images/нет-такого.jpg', 'images/note.txt', 'secret.txt', "images/a\0b.jpg"] as $bad) {
         check(ImageHelper::resized($bad, 640) === null, 'картинки: отказ для «' . $bad . '»');
     }
 
