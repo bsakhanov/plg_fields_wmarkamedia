@@ -4,7 +4,7 @@
  * @package     Joomla.Plugin
  * @subpackage  Fields.WmarkaMedia
  *
- * Тип поля «Видео»: YouTube, Vimeo, VK, Rutube, Facebook, Instagram, TikTok, Telegram, файл .mp4/.webm.
+ * Тип поля «Видео»: YouTube, Vimeo, VK, Rutube, Facebook, Instagram, TikTok, файл .mp4/.webm; пост Telegram — ссылкой (встраивание включается настройкой).
  * Макет можно переопределить: templates/<шаблон>/html/plg_fields_wmarkamedia/wmarkavideo.php
  *
  * @copyright   (C) 2026 Beibit Sakhanov
@@ -15,7 +15,9 @@
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
 use Wmarka\Plugin\Fields\WmarkaMedia\Helper\Assets;
+use Wmarka\Plugin\Fields\WmarkaMedia\Helper\ImageHelper;
 use Wmarka\Plugin\Fields\WmarkaMedia\Helper\VideoHelper;
 
 $raw = \is_array($field->value) ? (string) reset($field->value) : (string) $field->value;
@@ -24,7 +26,7 @@ if (trim($raw) === '') {
     return;
 }
 
-$ref = VideoHelper::parse($raw, (bool) $fieldParams->get('nocookie', 1));
+$ref = VideoHelper::parse($raw, (bool) $fieldParams->get('nocookie', 1), (string) $fieldParams->get('telegram', 'link') === 'embed');
 
 if ($ref === null) {
     return;
@@ -38,6 +40,32 @@ $title   = trim((string) ($item->title ?? '')) ?: $ref->label;
 $mode    = (string) $fieldParams->get('mode', 'facade');
 $showLnk = (bool) $fieldParams->get('show_link', 1);
 $extra   = trim((string) $fieldParams->get('css_class', ''));
+
+// постер: auto — миниатюра сервиса (есть у YouTube), иначе изображение материала; article — только изображение материала
+// (ни одного запроса к чужому серверу до нажатия); none — без картинки
+$posterMode = (string) $fieldParams->get('poster', 'auto');
+
+// изображение материала: обложка роликов, у которых сервис постер не отдаёт (TikTok, Instagram, Reels), и картинка для VideoObject
+$cover    = null;   // адрес для <img>: копия 720 px, если её можно сделать, иначе оригинал
+$coverAbs = null;   // абсолютный адрес оригинала для микроразметки
+
+if (!empty($item->images)) {
+    $imgs  = json_decode((string) $item->images, true);
+    $first = \is_array($imgs) ? (trim((string) ($imgs['image_fulltext'] ?? '')) ?: trim((string) ($imgs['image_intro'] ?? ''))) : '';
+    $first = (string) preg_replace('~#.*$~', '', $first);
+
+    if ($first !== '') {
+        if (preg_match('~^https?://~i', $first)) {
+            $cover = $coverAbs = $first;
+        } else {
+            $rel      = rawurldecode(ltrim($first, '/'));
+            $path     = Uri::root(true) . '/' . implode('/', array_map('rawurlencode', explode('/', $rel)));
+            $coverAbs = Uri::getInstance()->toString(['scheme', 'host', 'port']) . $path;
+            $small    = ImageHelper::resized($rel, 720);
+            $cover    = ($small !== null && $small['url'] !== null) ? $small['url'] : $path;
+        }
+    }
+}
 
 // соотношение сторон: по сервису и ссылке или заданное в настройках поля
 $ratio    = $ref->ratio;
@@ -65,7 +93,11 @@ echo '<div class="' . $class . '" style="' . $style . '"';
 
 if ($ref->kind === 'iframe' && $mode !== 'iframe') {
     // фасад: до нажатия страница не обращается к чужим серверам
-    $poster = $fieldParams->get('poster', 'auto') === 'auto' ? $ref->poster : null;
+    $poster = match ($posterMode) {
+        'none'    => null,
+        'article' => $cover,
+        default   => $ref->poster ?: $cover,
+    };
 
     echo ' data-wm-video data-embed="' . $e($ref->embedPlay) . '" data-title="' . $e($title) . '">';
     echo '<button type="button" class="wm-video__btn" aria-label="' . $e(Text::sprintf('PLG_FIELDS_WMARKAMEDIA_WATCH', $title)) . '">';
@@ -92,14 +124,7 @@ echo '</div>';
 
 // разметка VideoObject — только когда известна картинка (постер сервиса или обложка материала): без неё поисковики её отвергают
 if ((bool) $fieldParams->get('jsonld', 1) && $ref->kind !== 'link' && !empty($item->title)) {
-    $thumb = $ref->poster;
-
-    if (!$thumb && !empty($item->images)) {
-        $imgs  = json_decode((string) $item->images, true);
-        $first = \is_array($imgs) ? ($imgs['image_fulltext'] ?? $imgs['image_intro'] ?? '') : '';
-        $first = (string) preg_replace('~#.*$~', '', (string) $first);
-        $thumb = $first !== '' ? (preg_match('~^https?://~i', $first) ? $first : rtrim(\Joomla\CMS\Uri\Uri::root(), '/') . '/' . ltrim($first, '/')) : null;
-    }
+    $thumb = $posterMode === 'article' ? ($coverAbs ?: $ref->poster) : ($ref->poster ?: $coverAbs);
 
     if ($thumb) {
         $date = (string) ($item->publish_up ?? $item->created ?? '');

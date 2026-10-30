@@ -29,7 +29,14 @@ final class Assets
             return;
         }
 
-        $document = Factory::getApplication()->getDocument();
+        $app = Factory::getApplication();
+
+        // в консоли (cli/joomla.php: установка пакета, импорт, задачи планировщика) у приложения нет документа
+        if (!method_exists($app, 'getDocument')) {
+            return;
+        }
+
+        $document = $app->getDocument();
 
         if (!$document instanceof HtmlDocument) {
             return;

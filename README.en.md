@@ -2,7 +2,7 @@
 
 [Русский](README.md) · **English** · [Қазақша](README.kk.md)
 
-Plugin `plg_fields_wmarkamedia` 1.1.2 · Joomla 5.2 and later, including 6.x · GNU GPL version 2 or later
+Plugin `plg_fields_wmarkamedia` 1.2.0 · Joomla 5.2 and later, including 6.x · GNU GPL version 2 or later
 
 ## 1. What it is
 
@@ -10,7 +10,7 @@ One plugin provides three custom field types for articles:
 
 | Field type | The editor enters | The reader sees |
 |---|---|---|
-| **Wmarka Media: video** | a video link, an embed code or a bare YouTube ID | a poster with a button; the player is created only on click. YouTube, Vimeo, VK, Rutube, Facebook, Instagram, TikTok, Telegram and .mp4/.webm files |
+| **Wmarka Media: video** | a video link, an embed code or a bare YouTube ID | a poster with a button; the player is created only on click. YouTube, Vimeo, VK, Rutube, Facebook, Instagram, TikTok and .mp4/.webm files; a Telegram post is shown as a link |
 | **Wmarka Media: photo gallery** | rows of "photo, caption, credit" | a grid with captions and a viewer (arrows, Esc, "Photo 2 of 8") |
 | **Wmarka Media: list of links** | one link per line, an optional title after "\|" | a list or buttons with the service name |
 
@@ -52,7 +52,7 @@ One plugin provides three custom field types for articles:
 | Facebook | `/videos/…`, `/reel/…`, `/watch`, `fb.watch/…`, `/share/v/…`, `/share/r/…` | `/reel/`, `/share/r/` | no |
 | Instagram | `/reel/…`, `/reels/…`, `/p/…`, `/tv/…` | `/reel/`, `/tv/` | no |
 | TikTok | `tiktok.com/@name/video/123…`, `embed/v2/…`; **short links** (`vm.tiktok.com/…`) cannot be turned into a video number without a request to the service, so they stay a link | yes | no |
-| Telegram | `t.me/channel/123` (public channels) | no (ratio 4:5) | no |
+| Telegram | `t.me/channel/123` (public channels): **a link by default**; an embedded post shows the whole post together with its channel, and embedding (ratio 4:5, the height is set by Telegram) is switched on by the "Telegram posts" setting | no | no |
 | File | `.mp4`, `.webm`, `.ogv`, `.mov`, `.m4v`, absolute or relative | no | no |
 | Embed code | `<iframe …>` or a TikTok `<blockquote …>`: only the address is taken, the rest is discarded | by address | by address |
 | Anything else | any `http(s)://…` link | no | no |
@@ -63,7 +63,7 @@ Every embed address is built from validated parts (IDs), never from the editor's
 
 General values are set in the plugin (*Extensions → Plugins → Fields - Wmarka Media*), own values on the **General** tab of each field. An empty value means "use settings from the plugin".
 
-**Video:** player loading (on click · immediately), poster (provider thumbnail · no image), aspect ratio (auto · 16:9 · 9:16 · 4:5 · 1:1 · 4:3), maximum width of a vertical video (200–720 px, default 360), YouTube without cookies (yes), the "Open in …" link (yes), structured data (yes), CSS class.
+**Video:** player loading (on click · immediately), poster (provider thumbnail, otherwise the article image · article image only · no image), Telegram posts (link only · embed), aspect ratio (auto · 16:9 · 9:16 · 4:5 · 1:1 · 4:3), maximum width of a vertical video (200–720 px, default 360), YouTube without cookies (yes), the "Open in …" link (yes), structured data (yes), CSS class.
 
 **Photo gallery**
 
@@ -95,7 +95,7 @@ Screenshots are from a test Joomla 6.2.0 with the standard Cassiopeia template; 
 
 ## 8. Privacy and performance
 
-- **Before a click** the page contacts a third-party server only for the YouTube poster (`i.ytimg.com`, one image). With "Poster: no image" there are no requests to third-party sites at all until the click.
+- **Before a click** the page contacts a third-party server only for the YouTube poster (`i.ytimg.com`, one image). With "Poster: no image" or "Poster: article image only" there are no requests to third-party sites at all until the click.
 - **After a click** the service's player loads and its cookies apply (for YouTube `youtube-nocookie.com` by default).
 - Own assets: script 4.4 KB (1.7 KB gzipped) and styles 4.9 KB (1.8 KB). No libraries, no inline scripts except the structured-data block.
 - The gallery's first frame loads at once with high priority (`loading="eager"`, `fetchpriority="high"`); the others are deferred.
@@ -155,7 +155,7 @@ Put the script into the site root (next to `configuration.php`) or pass `--base=
 |---|---|
 | plugin contents (what goes into the zip) | `src/` |
 | build `dist/plg_fields_wmarkamedia-<version>.zip` and add an entry to `updates.xml` | `php build.php`; `--check` only checks; `--checksum` writes a sha256 (see `docs/PUBLISHING.md`) |
-| checks without Joomla (67: link parsing, gallery, image paths, languages, manifest) | `php tests/run.php` |
+| checks without Joomla (72: link parsing, gallery, image paths, languages, manifest) | `php tests/run.php` |
 | migration of old fields; layout, query and style examples | `tools/`, `examples/` |
 | syntax check, tests on PHP 8.1–8.4, build, release on a `v*` tag | `.github/workflows/ci.yml` (not run yet: check the first run) |
 | creating the repository and releasing a version | `docs/PUBLISHING.md` |
@@ -166,7 +166,7 @@ Pull requests and issues are welcome: run `php tests/run.php` and `php build.php
 
 - Short TikTok links stay links (section 5).
 - Embeds of Facebook, Instagram, TikTok, Telegram, VK and Rutube depend on those services and on the privacy settings of each video; in tests their addresses were verified, the videos themselves were not.
-- A poster is available only for YouTube (no request to service APIs is made).
+- A poster from the service itself is available only for YouTube (no request to service APIs is made); for other services the article image (a 720 px copy) is used, or a neutral card if the article has none.
 - Reduced copies need the GD library and handle only files inside `images/` (JPEG, PNG, WebP). The first views create copies in portions, so open the page once after publishing. Old copies are not deleted when a photo is replaced.
 - There is no "slider with a thumbnail strip" mode: that is a different layout, made with a layout override.
 - Autoplay after the click depends on browser rules.

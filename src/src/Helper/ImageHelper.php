@@ -48,6 +48,12 @@ final class ImageHelper
     public static function resized(string $relative, int $maxWidth, int $quality = 82, string $kind = 'thumb'): ?array
     {
         $maxWidth = max(100, min(4000, $maxWidth));
+
+        // нулевой байт (например, из «%00» в пути) заставил бы realpath() бросить ValueError и оборвал бы вывод страницы
+        if (str_contains($relative, "\0")) {
+            return null;
+        }
+
         $real     = realpath(JPATH_ROOT . '/' . ltrim($relative, '/'));
         $root     = realpath(JPATH_ROOT . '/images');
 
@@ -69,7 +75,7 @@ final class ImageHelper
             return ['url' => null, 'w' => $w, 'h' => $h];
         }
 
-        if ($w * $h > self::MAX_PIXELS || !\extension_loaded('gd')) {
+        if ($w * $h > self::MAX_PIXELS || !\extension_loaded('gd') || !self::fitsInMemory($w, $h)) {
             return null;
         }
 
@@ -110,5 +116,30 @@ final class ImageHelper
         }
 
         return ['url' => Uri::root(true) . '/media/plg_fields_wmarkamedia/cache/' . $name, 'w' => $maxWidth, 'h' => $newH];
+    }
+
+    /** Хватит ли памяти, чтобы раскрыть снимок: GD держит около 5 байт на пиксель, и нехватка памяти — фатальная ошибка, которую не перехватить */
+    private static function fitsInMemory(int $w, int $h): bool
+    {
+        $limit = \ini_get('memory_limit');
+
+        if ($limit === false || $limit === '' || (int) $limit === -1) {
+            return true;
+        }
+
+        $bytes = (int) $limit;
+
+        switch (strtolower(substr($limit, -1))) {
+            case 'g':
+                $bytes *= 1024;
+                // no break
+            case 'm':
+                $bytes *= 1024;
+                // no break
+            case 'k':
+                $bytes *= 1024;
+        }
+
+        return $w * $h * 5 + 8 * 1024 * 1024 < $bytes - memory_get_usage();
     }
 }

@@ -23,7 +23,7 @@ use Joomla\Event\SubscriberInterface;
  * Fields - Wmarka Media.
  *
  * Один плагин — три типа поля (каждый файл в tmpl/ задаёт отдельный тип, так устроена и Joomla):
- *   wmarkavideo   — универсальное видео (YouTube, Vimeo, VK, Rutube, Facebook, Instagram, TikTok, Telegram, файл);
+ *   wmarkavideo   — универсальное видео (YouTube, Vimeo, VK, Rutube, Facebook, Instagram, TikTok, файл; Telegram — ссылкой);
  *   wmarkagallery — фотогалерея (повторяемые строки: фото, подпись, источник кадра);
  *   wmarkalinks   — список ссылок на соцсети (по одной в строке).
  *

@@ -10,6 +10,7 @@
 			<field name="poster" type="list" label="PLG_FIELDS_WMARKAMEDIA_PARAM_POSTER" default="" validate="options">
 				<option value="">COM_FIELDS_FIELD_USE_GLOBAL</option>
 				<option value="auto">PLG_FIELDS_WMARKAMEDIA_POSTER_AUTO</option>
+				<option value="article">PLG_FIELDS_WMARKAMEDIA_POSTER_ARTICLE</option>
 				<option value="none">PLG_FIELDS_WMARKAMEDIA_POSTER_NONE</option>
 			</field>
 			<field name="ratio" type="list" label="PLG_FIELDS_WMARKAMEDIA_PARAM_RATIO" default="" validate="options">
@@ -26,6 +27,11 @@
 				<option value="">COM_FIELDS_FIELD_USE_GLOBAL</option>
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
+			</field>
+			<field name="telegram" type="list" label="PLG_FIELDS_WMARKAMEDIA_PARAM_TELEGRAM" description="PLG_FIELDS_WMARKAMEDIA_PARAM_TELEGRAM_DESC" default="" validate="options">
+				<option value="">COM_FIELDS_FIELD_USE_GLOBAL</option>
+				<option value="link">PLG_FIELDS_WMARKAMEDIA_TELEGRAM_LINK</option>
+				<option value="embed">PLG_FIELDS_WMARKAMEDIA_TELEGRAM_EMBED</option>
 			</field>
 			<field name="show_link" type="list" label="PLG_FIELDS_WMARKAMEDIA_PARAM_SHOWLINK" default="" validate="options">
 				<option value="">COM_FIELDS_FIELD_USE_GLOBAL</option>
