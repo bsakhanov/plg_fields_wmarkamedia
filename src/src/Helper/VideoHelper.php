@@ -23,7 +23,13 @@ namespace Wmarka\Plugin\Fields\WmarkaMedia\Helper;
  */
 final class VideoHelper
 {
-    public static function parse(string $input, bool $nocookie = true): ?VideoRef
+    /**
+     * @param   string  $input          ссылка, код встраивания, «голый» идентификатор YouTube или адрес файла
+     * @param   bool    $nocookie       YouTube через youtube-nocookie.com
+     * @param   bool    $telegramEmbed  встраивать посты Telegram; по умолчанию нет: встроенный пост выводится целиком вместе с чужим
+     *                                  каналом, поэтому для t.me возвращается только ссылка (kind = link)
+     */
+    public static function parse(string $input, bool $nocookie = true, bool $telegramEmbed = false): ?VideoRef
     {
         $url = self::normalize($input);
 
@@ -38,7 +44,7 @@ final class VideoHelper
             ?? self::matchFacebook($url)
             ?? self::matchInstagram($url)
             ?? self::matchTiktok($url)
-            ?? self::matchTelegram($url)
+            ?? self::matchTelegram($url, $telegramEmbed)
             ?? self::matchFile($url)
             ?? self::matchLink($url);
     }
@@ -216,15 +222,22 @@ final class VideoHelper
         return preg_match('~^https?://[^\s"<>]+$~i', $url) ? new VideoRef('tiktok', 'TikTok', '', $url, null, null, true, '9/16', null, 'link') : null;
     }
 
-    private static function matchTelegram(string $url): ?VideoRef
+    private static function matchTelegram(string $url, bool $embedPost): ?VideoRef
     {
         if (!preg_match('~(?:^|[/.])(?:t|telegram)\.me/([A-Za-z0-9_]{4,})/(\d+)~i', $url, $m)) {
             return null;
         }
 
-        $embed = 'https://t.me/' . $m[1] . '/' . $m[2] . '?embed=1&mode=tme';
+        $page = 'https://t.me/' . $m[1] . '/' . $m[2];
 
-        return new VideoRef('telegram', 'Telegram', $m[1] . '/' . $m[2], 'https://t.me/' . $m[1] . '/' . $m[2], $embed, $embed, false, '4/5', null, 'iframe');
+        // встроенный пост Telegram показывает весь чужой пост вместе с каналом, поэтому по умолчанию — только ссылка
+        if (!$embedPost) {
+            return new VideoRef('telegram', 'Telegram', $m[1] . '/' . $m[2], $page, null, null, false, '4/5', null, 'link');
+        }
+
+        $embed = $page . '?embed=1&mode=tme';
+
+        return new VideoRef('telegram', 'Telegram', $m[1] . '/' . $m[2], $page, $embed, $embed, false, '4/5', null, 'iframe');
     }
 
     private static function matchFile(string $url): ?VideoRef

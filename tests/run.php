@@ -19,7 +19,50 @@ namespace Joomla\CMS\Uri {
     }
 }
 
+namespace Joomla\CMS {
+    /** Заглушка класса Joomla: приложение подменяется в проверках подключения ресурсов */
+    final class Factory
+    {
+        public static $app;
+
+        public static function getApplication()
+        {
+            return self::$app;
+        }
+    }
+}
+
+namespace Joomla\CMS\Document {
+    /** Заглушка документа: запоминает, какие ресурсы подключили */
+    class HtmlDocument
+    {
+        public array $calls = [];
+
+        public function getWebAssetManager()
+        {
+            return $this;
+        }
+
+        public function registerAndUseStyle(string $name, string $uri = ''): static
+        {
+            $this->calls[] = 'style:' . $name;
+
+            return $this;
+        }
+
+        public function registerAndUseScript(string $name, string $uri = '', array $options = [], array $attributes = []): static
+        {
+            $this->calls[] = 'script:' . $name;
+
+            return $this;
+        }
+    }
+}
+
 namespace {
+    use Joomla\CMS\Document\HtmlDocument;
+    use Joomla\CMS\Factory;
+    use Wmarka\Plugin\Fields\WmarkaMedia\Helper\Assets;
     use Wmarka\Plugin\Fields\WmarkaMedia\Helper\GalleryHelper;
     use Wmarka\Plugin\Fields\WmarkaMedia\Helper\ImageHelper;
     use Wmarka\Plugin\Fields\WmarkaMedia\Helper\LinksHelper;
@@ -32,7 +75,7 @@ namespace {
     mkdir($tmp . '/images', 0777, true);
     define('JPATH_ROOT', $tmp);
 
-    foreach (['VideoRef', 'VideoHelper', 'LinksHelper', 'GalleryHelper', 'ImageHelper'] as $class) {
+    foreach (['VideoRef', 'VideoHelper', 'LinksHelper', 'GalleryHelper', 'ImageHelper', 'Assets'] as $class) {
         require $src . '/src/Helper/' . $class . '.php';
     }
 
@@ -62,7 +105,7 @@ namespace {
         ['https://vm.tiktok.com/ZMDJuMNCu/',                                       'tiktok',    true,  'link'],
         ['https://www.tiktok.com/@user/video/7000000000000000000?lang=ru',         'tiktok',    true,  'iframe'],
         ['https://www.instagram.com/reel/CxYz123_AB/?utm_source=ig',               'instagram', true,  'iframe'],
-        ['https://t.me/example_channel/12345',                                     'telegram',  false, 'iframe'],
+        ['https://t.me/example_channel/12345',                                     'telegram',  false, 'link'],
         ['https://vimeo.com/76979871',                                             'vimeo',     false, 'iframe'],
         ['https://rutube.ru/video/0123456789abcdef0123456789abcdef/',              'rutube',    false, 'iframe'],
         ['https://vk.com/video-22822305_456239018',                                'vk',        false, 'iframe'],
@@ -87,6 +130,11 @@ namespace {
     check($yt !== null && str_ends_with((string) $yt->embedPlay, '&autoplay=1'), 'видео: адрес с автозапуском');
     $yt2 = VideoHelper::parse('W3Hx8ZMz7no', false);
     check($yt2 !== null && str_contains((string) $yt2->embed, 'www.youtube.com/embed/'), 'видео: без nocookie по настройке');
+
+    $tgLink = VideoHelper::parse('https://t.me/example_channel/12345');
+    check($tgLink !== null && $tgLink->kind === 'link' && $tgLink->embed === null && $tgLink->page === 'https://t.me/example_channel/12345', 'видео: Telegram по умолчанию — только ссылка');
+    $tgEmbed = VideoHelper::parse('https://t.me/example_channel/12345', true, true);
+    check($tgEmbed !== null && $tgEmbed->kind === 'iframe' && str_contains((string) $tgEmbed->embed, 'embed=1') && $tgEmbed->ratio === '4/5', 'видео: Telegram встраивается по настройке');
 
     // ---------------------------------------------------------------- ссылки
     $links = LinksHelper::parse("https://t.me/example | Обсудить в Telegram\njavascript:alert(1)\nне ссылка\nhttps://vm.tiktok.com/ZMDFkCHXP/Когда в Астане исчезнут запашки?\n\nhttps://example.org/x");
@@ -162,6 +210,33 @@ namespace {
 
     $known = array_merge($keys['plg_fields_wmarkamedia.ini']['en-GB'], $keys['plg_fields_wmarkamedia.sys.ini']['en-GB']);
     check(!array_diff(array_unique($used), $known), 'язык: все ключи из кода определены (' . implode(', ', array_diff(array_unique($used), $known)) . ')');
+
+    // ---------------------------------------------------------------- подключение ресурсов
+    Factory::$app = new \stdClass();   // консоль: у приложения нет getDocument()
+    $threw        = false;
+
+    try {
+        Assets::load();
+    } catch (\Throwable $e) {
+        $threw = true;
+    }
+
+    check(!$threw, 'ресурсы: в консоли без документа ошибки нет');
+
+    $doc          = new HtmlDocument();
+    Factory::$app = new class ($doc) {
+        public function __construct(private HtmlDocument $doc)
+        {
+        }
+
+        public function getDocument()
+        {
+            return $this->doc;
+        }
+    };
+    Assets::load();
+    Assets::load();
+    check($doc->calls === ['style:plg_fields_wmarkamedia', 'script:plg_fields_wmarkamedia'], 'ресурсы: на странице подключаются один раз');
 
     // ---------------------------------------------------------------- итог
     @unlink($tmp . '/secret.txt');

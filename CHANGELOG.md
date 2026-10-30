@@ -2,11 +2,25 @@
 
 Формат — [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/), версии — [SemVer](https://semver.org/lang/ru/).
 
+## [1.2.0] — 2026-10-30
+
+### Исправлено / Fixed
+- Падение в консоли (`cli/joomla.php`: установка пакета, импорт, задачи планировщика): при подготовке поля «Видео» `Assets::load()` вызывал `getDocument()`, которого у консольного приложения нет (`Call to undefined method ConsoleApplication::getDocument()`). Теперь в консоли ресурсы страницы не подключаются. / Crash in the console (`cli/joomla.php`: package install, import, scheduled tasks): preparing a video field called `getDocument()`, which the console application does not have. The console now skips page assets.
+
+### Изменено / Changed
+- Пост Telegram по умолчанию показывается ссылкой «Смотреть на Telegram»: встроенный пост выводится целиком вместе с чужим каналом. Встраивание включается настройкой «Посты Telegram» (в плагине и в поле). / A Telegram post is a link by default (an embedded post shows the whole post with its channel); embedding is the "Telegram posts" setting.
+- Казахский интерфейс: «кішірейтілген сурет» вместо «нобай».
+
+### Добавлено / Added
+- Постер для сервисов, которые его не отдают (TikTok, Instagram, Reels): изображение материала (копия 720 px, если её можно сделать). / Poster for services that do not provide one: the article image (a 720 px copy when possible).
+- Настройка постера «Только изображение материала»: до нажатия нет ни одного запроса к чужому серверу, в том числе к `i.ytimg.com`. / Poster setting "Article image only": no request to any third-party server before the click.
+
 ## [1.1.3] — 2026-10-28
 
 ### Исправлено / Fixed
 - Путь к фото с нулевым байтом (`%00`) вызывал `ValueError` в `realpath()` и обрывал вывод страницы; теперь такой путь отклоняется. / A photo path containing a null byte no longer aborts page rendering.
 - Перед уменьшением снимка проверяется доступная память: при нехватке берётся оригинал вместо фатальной ошибки. / Available memory is checked before resizing an image; the original is used instead of a fatal error.
+
 
 ## [1.1.2] — 2026-10-25
 

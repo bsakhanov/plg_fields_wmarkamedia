@@ -6,7 +6,7 @@
 	<copyright>(C) 2026 Beibit Sakhanov</copyright>
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<authorUrl>https://webmarka.kz</authorUrl>
-	<version>1.1.3</version>
+	<version>1.2.0</version>
 	<description>PLG_FIELDS_WMARKAMEDIA_XML_DESCRIPTION</description>
 	<namespace path="src">Wmarka\Plugin\Fields\WmarkaMedia</namespace>
 	<scriptfile>script.php</scriptfile>
@@ -41,6 +41,7 @@
 				</field>
 				<field name="poster" type="list" label="PLG_FIELDS_WMARKAMEDIA_PARAM_POSTER" default="auto" validate="options">
 					<option value="auto">PLG_FIELDS_WMARKAMEDIA_POSTER_AUTO</option>
+					<option value="article">PLG_FIELDS_WMARKAMEDIA_POSTER_ARTICLE</option>
 					<option value="none">PLG_FIELDS_WMARKAMEDIA_POSTER_NONE</option>
 				</field>
 				<field name="ratio" type="list" label="PLG_FIELDS_WMARKAMEDIA_PARAM_RATIO" default="auto" validate="options">
@@ -55,6 +56,10 @@
 				<field name="nocookie" type="radio" label="PLG_FIELDS_WMARKAMEDIA_PARAM_NOCOOKIE" layout="joomla.form.field.radio.switcher" default="1" filter="integer">
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
+				</field>
+				<field name="telegram" type="list" label="PLG_FIELDS_WMARKAMEDIA_PARAM_TELEGRAM" description="PLG_FIELDS_WMARKAMEDIA_PARAM_TELEGRAM_DESC" default="link" validate="options">
+					<option value="link">PLG_FIELDS_WMARKAMEDIA_TELEGRAM_LINK</option>
+					<option value="embed">PLG_FIELDS_WMARKAMEDIA_TELEGRAM_EMBED</option>
 				</field>
 				<field name="show_link" type="radio" label="PLG_FIELDS_WMARKAMEDIA_PARAM_SHOWLINK" layout="joomla.form.field.radio.switcher" default="1" filter="integer">
 					<option value="0">JNO</option>
